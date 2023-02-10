@@ -18,8 +18,8 @@ import {
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Routes from './src/navigation';
 import { NavigationContainer } from '@react-navigation/native';
-
-
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
 
 
 
@@ -31,9 +31,11 @@ function App() {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <Routes></Routes>
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          <Routes></Routes>
+        </NavigationContainer>
+      </Provider>  
       
     </SafeAreaProvider>
   );

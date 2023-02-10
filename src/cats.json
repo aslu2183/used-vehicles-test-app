@@ -1,0 +1,61 @@
+[
+    {
+        "name" : "Car",
+        "id"   : 1,
+        "count": 100,
+        "brand": [
+            {
+                "name" : "BMW",
+                "id"   : 1,
+                "count": 10,
+                "model": [
+                    {
+                        "name" : "X6",
+                        "id"   : 1,
+                        "count": 5,
+                        "trim" : [
+                            {
+                                "name" : "4WD",
+                                "id"   : 1,
+                                "count": 2 
+                            },
+                            {
+                                "name" : "4*4",
+                                "id"   : 2,
+                                "count": 2 
+                            },
+                            {
+                                "name" : "2WD",
+                                "id"   : 2,
+                                "count": 1 
+                            }
+                        ] 
+                    },
+                    {
+                        "name" : "X7",
+                        "id"   : 2,
+                        "count": 5,
+                        "trim" : []
+                    }
+                ]
+            },
+            {
+                "name" : "Volvo",
+                "id"   : 2,
+                "count": 20, 
+                "model":[]
+            }
+        ] 
+    },
+    {
+        "name" : "Bus",
+        "id"   : 2,
+        "count": 0,
+        "brand": []
+    },
+    {
+        "name" : "Truck",
+        "id"   : 3,
+        "count": 5
+    }
+]
