@@ -104,7 +104,7 @@ export default function TreeItem({data,level,parent}){
                 : null }    
             </ListItem>
             {items?.length > 0 && showChild ?
-                <View style={{marginLeft:level * 10}}>
+                <View style={{marginLeft:level * 15}}>
                     <TreeView data={items} level={level + 1} parent={parent}></TreeView>
                 </View>    
              :null    

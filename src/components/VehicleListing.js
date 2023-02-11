@@ -15,14 +15,13 @@ export default function VehicleListing(props){
                                     <Card.Image
                                         style={{ padding: 0 }}
                                         source={{
-                                        uri:
-                                            'https://awildgeographer.files.wordpress.com/2015/02/john_muir_glacier.jpg',
+                                            uri:item.vehicle_image_url,
                                         }}
                                     />
-                                    <Text style={{ marginBottom: 10 }}>
-                                        The idea with React Native Elements is more about component
-                                        structure than actual design.
-                                    </Text>
+                                    <View style={{ marginBottom: 10,marginTop:10 }}>
+                                        <Text>{item.name}</Text>
+                                        <Text>{item.category.name}</Text>
+                                    </View>
                                 </Card>
                             </View>
                             
