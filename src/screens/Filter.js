@@ -34,34 +34,34 @@ export default function Filter({ navigation }){
         const ch = filter.variants.map((item) => {
             return item.label.split("-")
         })
+
+        // const levelArray = ch.map((item) => item.length)
+        // const levels     = Math.max(...levelArray)
         
-        const levelArray = ch.map((item) => item.length)
-        const levels     = Math.max(...levelArray)
-        
-        let tmp_arr = []
-        for(i = 0;i < levels;i++){
-            let j = 0
-            tmp_arr[i] = []
-            if(ch.length < levels){
-                for(j = 0;j < ch.length;j ++ ){
-                    if(tmp_arr[i].indexOf(ch[j][i]) < 0 && ch[j][i]){
-                        tmp_arr[i].push(ch[j][i])
-                    }    
-                }    
-            }
-            else{
-                while( j < ch.length ){
-                    if(ch[j][i]){
-                        if(tmp_arr[i].indexOf(ch[j][i]) < 0){
-                            tmp_arr[i].push(ch[j][i]);
-                        }    
-                    }
-                    j++    
-                }
-            }    
-        }
-        dispatch(add_filter_items(tmp_arr))
-        console.log("New Arr is ",tmp_arr)
+        // let tmp_arr = []
+        // for(i = 0;i < levels;i++){
+        //     let j = 0
+        //     tmp_arr[i] = []
+        //     if(ch.length < levels){
+        //         for(j = 0;j < ch.length;j ++ ){
+        //             if(tmp_arr[i].indexOf(ch[j][i]) < 0 && ch[j][i]){
+        //                 tmp_arr[i].push(ch[j][i])
+        //             }    
+        //         }    
+        //     }
+        //     else{
+        //         while( j < ch.length ){
+        //             if(ch[j][i]){
+        //                 if(tmp_arr[i].indexOf(ch[j][i]) < 0){
+        //                     tmp_arr[i].push(ch[j][i]);
+        //                 }    
+        //             }
+        //             j++    
+        //         }
+        //     }    
+        // }
+        dispatch(add_filter_items(ch))
+        console.log("New Arr is ",ch)
         navigation.navigate("Home");
     }
     return(

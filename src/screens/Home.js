@@ -19,7 +19,10 @@ export default function Home(){
     },[filter.filterValues])
 
     const getVehicels = () => {
-        Axios().get('/list-vehicles')
+        const data = {
+            filter : filter.filterValues,
+        }
+        Axios().post('/list-vehicles',data)
         .then((res) => {
             setloading(false)
             const response = res.data
@@ -32,16 +35,20 @@ export default function Home(){
         })
         .catch((error) => {
             setloading(false)
-            console.warn(error)
         })
+    }
+    let display_content = <Text>No Vehicles Found</Text>
+    if(loading){
+        display_content = <ActivityIndicator></ActivityIndicator>
+    }
+    if(vehicles.length > 0){
+        display_content = <VehicleListing vehicle={vehicles}></VehicleListing>
     }
     return(
         <ScrollView 
             contentContainerStyle={{flexGrow:1,justifyContent:'center',alignItems:'center'}}
             >
-            {
-                loading ? <ActivityIndicator></ActivityIndicator> : <VehicleListing vehicle={vehicles}></VehicleListing>
-            }    
+            { display_content }  
         </ScrollView>
     )
 }

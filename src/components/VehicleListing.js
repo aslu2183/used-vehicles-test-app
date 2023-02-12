@@ -19,8 +19,8 @@ export default function VehicleListing(props){
                                         }}
                                     />
                                     <View style={{ marginBottom: 10,marginTop:10 }}>
-                                        <Text>{item.name}</Text>
-                                        <Text>{item.category.name}</Text>
+                                        <Text style={{fontSize:15,color:'black',fontWeight:'bold'}}>{item.name}</Text>
+                                        <Text style={{fontWeight:'bold'}}>{item.category.name}</Text>
                                     </View>
                                 </Card>
                             </View>

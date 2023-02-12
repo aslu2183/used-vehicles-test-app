@@ -15,7 +15,7 @@ export const formatted_data = (data) => {
                             label : model.name,
                             value : model.id,
                             count : model.vehicle_count,
-                            items : model?.trim?.map((trim) => {
+                            items : model?.variant?.map((variant) => {
                                 return {
                                     label : variant.name,
                                     value : variant.id,
