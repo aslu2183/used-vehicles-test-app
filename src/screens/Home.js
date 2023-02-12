@@ -41,9 +41,11 @@ export default function Home(){
     if(loading){
         display_content = <ActivityIndicator></ActivityIndicator>
     }
-    if(vehicles.length > 0){
-        display_content = <VehicleListing vehicle={vehicles}></VehicleListing>
-    }
+    else{
+        if(vehicles.length > 0){
+            display_content = <VehicleListing vehicle={vehicles}></VehicleListing>
+        }
+    }    
     return(
         <ScrollView 
             contentContainerStyle={{flexGrow:1,justifyContent:'center',alignItems:'center'}}
