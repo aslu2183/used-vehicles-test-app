@@ -82,6 +82,7 @@ export default function TreeItem({data,level,parent}){
     
     React.useEffect(() => {
         setChecked(redux_items.checked_items.includes(label) ? true : false)
+        setshowChild(redux_items.checked_items.includes(label) ? true : false)
     },[redux_items.checked_items])
     // console.log("Redux Items ",redux_items)
     
@@ -95,12 +96,21 @@ export default function TreeItem({data,level,parent}){
                     uncheckedIcon="checkbox-blank-outline"
                     checked={checked}
                     onPress={() => selectItem(level)}
+                    size={30}
+                    checkedColor={"#0F0"}
+                    uncheckedColor={"#000"}
                 />
                 <ListItem.Content>
-                    <ListItem.Title>{label+" ("+count+")"}</ListItem.Title>
+                    <ListItem.Title style={{color:'#000',fontWeight:'bold'}}>{label+" ("+count+")"}</ListItem.Title>
                 </ListItem.Content>
                 {items.length > 0 ? 
-                    <ListItem.Chevron onPress={() => setshowChild(!showChild)}></ListItem.Chevron>
+                    <ListItem.Chevron 
+                        onPress={() => setshowChild(!showChild)} 
+                        size={30} 
+                        color="black"
+                        type="material-community"
+                        name={showChild ? "chevron-down" : "chevron-up"}
+                    ></ListItem.Chevron>
                 : null }    
             </ListItem>
             {items?.length > 0 && showChild ?

@@ -2,43 +2,15 @@ import {View, Text, ScrollView, TouchableOpacity, ActivityIndicator} from 'react
 // import data from "../cats.json"
 import TreeView from '../components/TreeView'
 import {useDispatch, useSelector} from 'react-redux'
-import { reset_filter } from '../redux/reducer/filterReducer'
+import { reset_filter, add_filter_items } from '../redux/reducer/filterReducer'
 import { formatted_data } from '../helpers/utils'
 import React from 'react'
 import Axios from '../helpers/api'
+import { Button } from '@rneui/themed';
 
-export default function Filter(){
+export default function Filter({ navigation }){
     const [loading, setloading] = React.useState(true)
     const [items, setitems]     = React.useState([])
-    // const formatted_data = data.map((item) => {
-    //     return {
-    //         label : item.name,
-    //         value : item.id,
-    //         count : item.count,
-    //         items : item?.brand?.map((brand) => {
-    //             return {
-    //                 label : brand.name,
-    //                 value : brand.id,
-    //                 count : brand.count,
-    //                 items : brand?.model?.map((model) => {
-    //                     return {
-    //                         label : model.name,
-    //                         value : model.id,
-    //                         count : model.count,
-    //                         items : model?.trim?.map((trim) => {
-    //                             return {
-    //                                 label : trim.name,
-    //                                 value : trim.id,
-    //                                 count : trim.count,
-    //                                 items : []
-    //                             }
-    //                         })||[]
-    //                     }
-    //                 })||[]
-    //             }
-    //         })||[] 
-    //     }
-    // })
     const dispatch = useDispatch()
     const filter   = useSelector((state) => state.filter)
     React.useEffect(() => {
@@ -72,7 +44,7 @@ export default function Filter(){
             tmp_arr[i] = []
             if(ch.length < levels){
                 for(j = 0;j < ch.length;j ++ ){
-                    if(tmp_arr[i].indexOf(ch[j][i]) < 0){
+                    if(tmp_arr[i].indexOf(ch[j][i]) < 0 && ch[j][i]){
                         tmp_arr[i].push(ch[j][i])
                     }    
                 }    
@@ -88,35 +60,64 @@ export default function Filter(){
                 }
             }    
         }
+        dispatch(add_filter_items(tmp_arr))
         console.log("New Arr is ",tmp_arr)
+        navigation.navigate("Home");
     }
     return(
-        <View style={{flex:1,backgroundColor:'white'}}>
+        <View style={{flex:1,backgroundColor:'white',justifyContent:'center'}}>
             {
                 loading ? <ActivityIndicator></ActivityIndicator>
                 :<><ScrollView contentContainerStyle={{flexGrow:1}}>
                 <TreeView data={items}></TreeView>
             </ScrollView>
             <View style={{padding:10}}>
-                <Text style={{fontSize:20,fontWeight:'bold'}}>Selected Variant:</Text>
+                <Text style={{fontSize:20,fontWeight:'bold',color:'black'}}>Selected Variant:</Text>
                 <View style={{marginBottom:10}}>
                     {
                         filter.variants.map((item,i) => {
                             const slno = i + 1
-                            const label = item?.label?.replace(/-/g,",")
+                            const label = item?.label?.replace(/-/g,",  ")
                             return (
-                                <Text key={slno}>{slno+". "+label}</Text>
+                                <Text key={slno} style={{color:'black',fontWeight:'bold'}}>{slno+". "+label}</Text>
                             )    
                         })
                     }
                 </View>
                 <View style={{justifyContent:'space-around',flexDirection:'row'}}>
-                    <TouchableOpacity style={{padding:15,borderWidth:1}} onPress={applyFilter}>
-                        <Text>Apply Filter</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{padding:15,borderWidth:1}} onPress={() => dispatch(reset_filter())}>
-                        <Text>Reset Filter</Text>
-                    </TouchableOpacity>
+                   
+                        <Button
+                            title="Apply"
+                            buttonStyle={{
+                                borderWidth: 2,
+                                borderColor: 'white',
+                                borderRadius: 30,
+                            }}
+                            containerStyle={{
+                                width : 150,
+                                marginHorizontal: 50,
+                                marginVertical: 10,
+                            }}
+                            titleStyle={{ fontWeight: 'bold' }}
+                            onPress={applyFilter}
+                        />
+
+                        <Button
+                            title="Reset"
+                            buttonStyle={{
+                                borderWidth: 2,
+                                borderColor: 'white',
+                                borderRadius: 30,
+                            }}
+                            containerStyle={{
+                                width : 150,
+                                marginHorizontal: 50,
+                                marginVertical: 10,
+                            }}
+                            titleStyle={{ fontWeight: 'bold' }}
+                            onPress={() => dispatch(reset_filter())}
+                        />
+                          
                 </View>
             </View>
             </>

@@ -29,10 +29,11 @@ const filterSlice = createSlice({
         reset_filter : (state, action) => {
             return {
                 checked_items : [],
-                variants : []
+                variants      : [],
+                filterValues  : []
             }
         }
     } 
 })
-export const {add_items,add_variants,reset_filter} = filterSlice.actions
+export const {add_items,add_variants,reset_filter,add_filter_items} = filterSlice.actions
 export default filterSlice.reducer

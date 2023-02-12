@@ -15,7 +15,7 @@ export default function Navigation() {
                     options={({ navigation }) => ({
                         title: "Vehicle List",
                         headerRight:() => {
-                            return <Ionicons name="md-filter" size={24} onPress={()=>navigation.navigate("Filter")}></Ionicons>
+                            return <Ionicons name="md-filter" color="black" size={24} onPress={()=>navigation.navigate("Filter")}></Ionicons>
                         }
                     })} 
                     >
