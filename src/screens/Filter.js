@@ -61,28 +61,34 @@ export default function Filter(){
     const applyFilter = () => {
         const ch = filter.variants.map((item) => {
             return item.label.split("-")
-            // console.warn("item ",item)
-            // const item_arr = item.label.split("-")
-            // const ch = item_arr.map((res,k) => {
-            //     return items.find((obj) => obj.label == res)?.label || ''
-                   
-            // })
         })
         
-        const d = ch.map((item,index) => {
-            return item.map((res,key) => {
-                console.log("Res ",res);
-                const newIndex = index + 1
-                if(newIndex >= ch.length){
-                    return false
+        const levelArray = ch.map((item) => item.length)
+        const levels     = Math.max(...levelArray)
+        
+        let tmp_arr = []
+        for(i = 0;i < levels;i++){
+            let j = 0
+            tmp_arr[i] = []
+            if(ch.length < levels){
+                for(j = 0;j < ch.length;j ++ ){
+                    if(tmp_arr[i].indexOf(ch[j][i]) < 0){
+                        tmp_arr[i].push(ch[j][i])
+                    }    
+                }    
+            }
+            else{
+                while( j < ch.length ){
+                    if(ch[j][i]){
+                        if(tmp_arr[i].indexOf(ch[j][i]) < 0){
+                            tmp_arr[i].push(ch[j][i]);
+                        }    
+                    }
+                    j++    
                 }
-                item = ch[index+1]
-                console.log("Item ",item)
-                console.log("Index ",index)
-                return res[index]
-            }) 
-        })
-        console.warn("D is ",d)
+            }    
+        }
+        console.log("New Arr is ",tmp_arr)
     }
     return(
         <View style={{flex:1,backgroundColor:'white'}}>

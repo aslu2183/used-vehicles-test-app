@@ -4,7 +4,8 @@ const filterSlice = createSlice({
     name : "filter",
     initialState : {
         checked_items : [],
-        variants : []
+        variants : [],
+        filterValues : []
     },
     reducers : {
         add_items : (state,action) => {
@@ -21,6 +22,9 @@ const filterSlice = createSlice({
         },
         add_variants : (state,action) => {
             state.variants = action.payload;
+        },
+        add_filter_items : (state,action) => {
+            state.filterValues = action.payload
         },
         reset_filter : (state, action) => {
             return {
