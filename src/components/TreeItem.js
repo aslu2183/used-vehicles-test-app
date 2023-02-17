@@ -18,10 +18,7 @@ export default function TreeItem({data,level,parent}){
         
         if(!checked === false){
             b = pr.slice(0,pr.indexOf(data.label))
-            // const filter_arr = ch.map((item) => {
-            //     return pr.join("-").concat("-",item)
-            // })
-            // filter_arr.push(pr.join("-"))
+            
             const filter_arr = redux_variants.filter((a) => {
                 return a.label.includes(pr.join("-"))
             }).map((item) => item.label)
@@ -84,13 +81,12 @@ export default function TreeItem({data,level,parent}){
         setChecked(redux_items.checked_items.includes(label) ? true : false)
         setshowChild(redux_items.checked_items.includes(label) ? true : false)
     },[redux_items.checked_items])
-    // console.log("Redux Items ",redux_items)
+    
     
     return (
         <View>
-            <ListItem>
+            <ListItem onPress={() => selectItem(level)}>
                 <ListItem.CheckBox
-                    // Use ThemeProvider to change the defaults of the checkbox
                     iconType="material-community"
                     checkedIcon="checkbox-marked"
                     uncheckedIcon="checkbox-blank-outline"
