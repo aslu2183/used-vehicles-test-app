@@ -13,51 +13,62 @@ export default function TreeItem({data,level,parent}){
         setChecked(!checked)
         let a = []
         let redux_variants = [...redux_items.variants]
-        const pr = parent.map((item) => item.label)
-        const ch = parent.find((item) => item.label == data.label)?.child
+        const selectedItemsArray = parent.map((item) => item.label)
+        console.log("Selected Items ",selectedItemsArray)
+        const childArrayOfSelectedItem = parent.find((item) => item.label == data.label)?.child
+        console.log("Child of selected Item ",childArrayOfSelectedItem)
         
         if(!checked === false){
-            b = pr.slice(0,pr.indexOf(data.label))
-            
-            const filter_arr = redux_variants.filter((a) => {
-                return a.label.includes(pr.join("-"))
+            const parentArrayOfUnSelectedItem = selectedItemsArray.slice(0,selectedItemsArray.indexOf(data.label))
+            console.log("parentArrayOfUnSelectedItem is ",parentArrayOfUnSelectedItem)
+            console.log("Redux variants ",redux_variants)
+            // labelArrayOfVariants is ["Car-BMW-X2"]
+            const labelArrayOfVariants = redux_variants.filter((a) => {
+                return a.label.includes(selectedItemsArray.join("-"))
             }).map((item) => item.label)
-            
-            const d = filter_arr.filter((item) => {
-                return ch.map((res) => res.includes(item))
+
+            console.log("Filter Array is ",labelArrayOfVariants)
+            // lastChildOfEachVariant equals ["X2","X7"] from the labelArrayOfVariants ["Car-BMW-X2","Car-BMW-X7"]
+            // For unchecking  all children of selected parent if available.
+            // for eg:- if user uncheck BMW this will uncheck its children also if checked.
+            const lastChildOfEachVariant = labelArrayOfVariants.filter((item) => {
+                return childArrayOfSelectedItem.map((res) => res.includes(item))
             }).map((a)=> a.split("-").pop())
-            ch.push(...d)
-            ch.push(data.label)
+
+            childArrayOfSelectedItem.push(...lastChildOfEachVariant)
+            childArrayOfSelectedItem.push(data.label)
             
-                       
-            dispatch(add_items({label:ch,isSelected:false}))
+            dispatch(add_items({label:childArrayOfSelectedItem,isSelected:false}))
             
             redux_variants = redux_variants.filter((item) => {
-                return !filter_arr.includes(item.label)
+                return !labelArrayOfVariants.includes(item.label)
             })
             const tmp_arr = redux_variants.filter((item) => {
-                return item.label.includes(b.join("-"))
+                return item.label.includes(parentArrayOfUnSelectedItem.join("-"))
             })
             
             if(tmp_arr.length == 0){
                 redux_variants.push({
-                    label : b.join("-"),
-                    level : b.length
+                    label : parentArrayOfUnSelectedItem.join("-"),
+                    level : parentArrayOfUnSelectedItem.length
                 })
             }
         }
         else{
-            pr.forEach((val) => {
+            selectedItemsArray.forEach((val) => {
                 dispatch(add_items({label:val,isSelected:true}))
             })
-            a = pr.slice(0,pr.indexOf(data.label))
-            const tmp_arr = [...a];
-            const b = a.map((item) => {
+            // parentArrayOfSelectedItem  X2 (model) is ["Car","BMW"]
+            const parentArrayOfSelectedItem = selectedItemsArray.slice(0,selectedItemsArray.indexOf(data.label))
+            const tmp_arr = [...parentArrayOfSelectedItem];//Copying parent array into new variable
+            //parentArrayOfEachItem ["Car","BMW","X2"] is [[],["Car"],["Car","BMW"]]
+            const parentArrayOfEachItem = parentArrayOfSelectedItem.map((item) => {
                 tmp_arr.pop()
                 return [...tmp_arr];
             })
-            b.push(a)
-            const filter_arr = b.filter((item) => {
+            parentArrayOfEachItem.push(parentArrayOfSelectedItem)
+            
+            const filter_arr = parentArrayOfEachItem.filter((item) => {
                 return item.length > 0
             }).map((res) => res.join("-"))
 
@@ -65,8 +76,9 @@ export default function TreeItem({data,level,parent}){
             redux_variants = redux_variants.filter((item) => {
                 return !filter_arr.includes(item.label)
             })
+            
             redux_variants.push({
-                label : pr.join("-"),
+                label : selectedItemsArray.join("-"),
                 level : level
             });
         }
@@ -82,7 +94,7 @@ export default function TreeItem({data,level,parent}){
         setshowChild(redux_items.checked_items.includes(label) ? true : false)
     },[redux_items.checked_items])
     
-    
+    console.log("Redux Items ",redux_items)
     return (
         <View>
             <ListItem onPress={() => selectItem(level)}>

@@ -31,10 +31,11 @@ export default function Filter({ navigation }){
     }
 
     const applyFilter = () => {
-        const ch = filter.variants.map((item) => {
+        /*filter.variants = [{"label": "Car-BMW", "level": 2}, {"label": "Car-AUDI", "level": 2}]*/
+        const splittedVariantsArray = filter.variants.map((item) => {
             return item.label.split("-")
         })
-        dispatch(add_filter_items(ch))
+        dispatch(add_filter_items(splittedVariantsArray))
         navigation.navigate("Home");
     }
     return(
@@ -48,6 +49,7 @@ export default function Filter({ navigation }){
                 <Text style={{fontSize:20,fontWeight:'bold',color:'black'}}>Selected Variant:</Text>
                 <View style={{marginBottom:10}}>
                     {
+                        /*filter.variants = [{"label": "Car-BMW", "level": 2}, {"label": "Car-AUDI", "level": 2}]*/
                         filter.variants.map((item,i) => {
                             const slno = i + 1
                             const label = item?.label?.replace(/-/g,",  ")
