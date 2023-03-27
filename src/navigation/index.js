@@ -4,7 +4,7 @@ import Home from '../screens/Home';
 import Filter from '../screens/Filter';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useSelector,useDispatch } from 'react-redux';
-import { reset_filter } from '../redux/reducer/filterReducer';
+import { reset_filter,add_variants,add_items } from '../redux/reducer/filterReducer';
 
 export default function Navigation() {
     const Stack        = createNativeStackNavigator()
@@ -12,8 +12,34 @@ export default function Navigation() {
     const filterParams = useSelector((state) => state.filter)
 
     const goToFilterScreen = (navigation) => {
+        //need update redux state before going to filter screen.
         if(filterParams.filterValues.length == 0){
             dispatch(reset_filter())
+        }
+        else{
+            const variantsNotInList = filterParams.filterValues.reduce((accumulator,item) => {
+                if(filterParams.variants.findIndex((variant) => variant.label == item.join("-")) < 0){
+                    accumulator.push(item)
+                }
+                return accumulator
+            },[])
+                        
+            if(variantsNotInList.length > 0){
+                const redux_variants = [...filterParams.variants]
+                const variantsToAdd  = variantsNotInList.reduce((accumulator,item) => {
+                    accumulator.push({
+                        label : item.join("-"),
+                        level : item.length
+                    })
+                    return accumulator
+                },redux_variants)
+                dispatch(add_variants(variantsToAdd))
+
+                const itemsToAdd = variantsNotInList.reduce((accumulator,item) => [...accumulator,...item],[])
+                itemsToAdd.forEach((val) => {
+                    dispatch(add_items({label:val,isSelected:true}))
+                })
+            }    
         }
         navigation.navigate('Filter')
     }
