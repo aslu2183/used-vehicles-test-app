@@ -17,29 +17,27 @@ export default function Navigation() {
             dispatch(reset_filter())
         }
         else{
-            const variantsNotInList = filterParams.filterValues.reduce((accumulator,item) => {
-                if(filterParams.variants.findIndex((variant) => variant.label == item.join("-")) < 0){
-                    accumulator.push(item)
-                }
+            const filteredVariants  = filterParams.filterValues
+            const variantsToAdd     = filteredVariants.reduce((accumulator,item) => {
+                accumulator.push({
+                    label : item.join("-"),
+                    level : item.length
+                })
                 return accumulator
             },[])
-                        
-            if(variantsNotInList.length > 0){
-                const redux_variants = [...filterParams.variants]
-                const variantsToAdd  = variantsNotInList.reduce((accumulator,item) => {
-                    accumulator.push({
-                        label : item.join("-"),
-                        level : item.length
-                    })
-                    return accumulator
-                },redux_variants)
-                dispatch(add_variants(variantsToAdd))
+            dispatch(add_variants(variantsToAdd))
 
-                const itemsToAdd = variantsNotInList.reduce((accumulator,item) => [...accumulator,...item],[])
-                itemsToAdd.forEach((val) => {
-                    dispatch(add_items({label:val,isSelected:true}))
-                })
-            }    
+            const itemsToAdd    = filteredVariants.reduce((accumulator,item) => [...accumulator,...item],[])
+            const itemsToDelete = filterParams.checked_items.filter((item) => itemsToAdd.indexOf(item) < 0)
+            
+            itemsToAdd.forEach((val) => {
+                dispatch(add_items({label:val,isSelected:true}))
+            })
+
+            itemsToDelete.forEach((val) => {
+                dispatch(add_items({label:val,isSelected:false}))
+            })
+               
         }
         navigation.navigate('Filter')
     }

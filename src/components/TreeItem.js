@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Text} from 'react-native'
-import TreeView from './TreeView'
 import { ListItem,Icon } from '@rneui/themed';
 import {useDispatch, useSelector} from 'react-redux'
 import { add_items,add_variants } from '../redux/reducer/filterReducer'
@@ -11,23 +10,17 @@ export default function TreeItem({data,level,parent}){
     const redux_items = useSelector((state) => state.filter);
     const selectItem = (level) => {
         setChecked(!checked)
-        let a = []
         let redux_variants = [...redux_items.variants]
         const selectedItemsArray = parent.map((item) => item.label)
-        console.log("Selected Items ",selectedItemsArray)
         const childArrayOfSelectedItem = parent.find((item) => item.label == data.label)?.child
-        console.log("Child of selected Item ",childArrayOfSelectedItem)
-        
+                
         if(!checked === false){
             const parentArrayOfUnSelectedItem = selectedItemsArray.slice(0,selectedItemsArray.indexOf(data.label))
-            console.log("parentArrayOfUnSelectedItem is ",parentArrayOfUnSelectedItem)
-            console.log("Redux variants ",redux_variants)
             // labelArrayOfVariants is ["Car-BMW-X2"]
             const labelArrayOfVariants = redux_variants.filter((a) => {
                 return a.label.includes(selectedItemsArray.join("-"))
             }).map((item) => item.label)
 
-            console.log("Filter Array is ",labelArrayOfVariants)
             // lastChildOfEachVariant equals ["X2","X7"] from the labelArrayOfVariants ["Car-BMW-X2","Car-BMW-X7"]
             // For unchecking  all children of selected parent if available.
             // for eg:- if user uncheck BMW this will uncheck its children also if checked.
@@ -94,7 +87,6 @@ export default function TreeItem({data,level,parent}){
         setshowChild(redux_items.checked_items.includes(label) ? true : false)
     },[redux_items.checked_items])
     
-    console.log("Redux Items ",redux_items)
     return (
         <View>
             <ListItem onPress={() => selectItem(level)}>
@@ -123,7 +115,17 @@ export default function TreeItem({data,level,parent}){
             </ListItem>
             {items?.length > 0 && showChild ?
                 <View style={{marginLeft:level * 15}}>
-                    <TreeView data={items} level={level + 1} parent={parent}></TreeView>
+                    {
+                        items.map((child, index) => {
+                            const set_parent = [...parent,{
+                                label : child.label,
+                                child : child?.items?.map((res) => res.label)||[]
+                            }]
+                            return (
+                                <TreeItem data={child} level={level + 1} parent={set_parent} key={index}></TreeItem>
+                            )
+                        })
+                    }
                 </View>    
              :null    
             }
